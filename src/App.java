@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class App{
     public static void main(String[] args) {
-
+/*pinga comes qliao que lo lea */
  Administrador a=new Administrador(1, "pepe", "1987", "123Admin");
     }
 }
