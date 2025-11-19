@@ -20,5 +20,5 @@ public class App{
  * admin va a agregar trabajadores, y modificar/ver inventario
  * trabajador hacer ventas y registrar clientes (para puntos)
  * cliente compra productos
- * 
+ * Gay
  */
