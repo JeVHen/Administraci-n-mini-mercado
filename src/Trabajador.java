@@ -1,4 +1,8 @@
+import java.util.ArrayList;
+
 public class Trabajador extends persona{
+    private ArrayList<Trabajador> Trabajadores=new ArrayList<>();
+    
     private int horas;
     private boolean asistencia;
     public int getHoras() {

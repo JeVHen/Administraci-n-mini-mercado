@@ -3,7 +3,23 @@ import java.util.ArrayList;
 public class App{
     public static void main(String[] args) {
 /*pinga comes qliao que lo lea */
- Administrador a=new Administrador(1, "pepe", "1987", "123Admin");
+  }
+    public static void Menu_1(int opcion){
+        System.out.println("Seleccione una de las siguientes opciones");
+        System.out.println("1. Ad");
+        System.out.println("Seleccione una de las siguientes opciones");
+        System.out.println("Seleccione una de las siguientes opciones");
+
+
+        
+    }
+    public static void Menu_2(int opcion){
+        System.out.println("Seleccione una de las siguientes opciones");
+
+    }
+    protected static void Menu_3(int opcion){
+        System.out.println("Seleccione una de las siguientes opciones");
+        
     }
 }
 /*ARRAYLIST CON PRODUCTOS
