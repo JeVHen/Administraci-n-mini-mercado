@@ -1,10 +1,10 @@
-public class cliente extends persona{
+public class cliente extends persona {
 
     private int puntosCliente;
 
-    public cliente(int tipoAcceso, String nombre, String idPersona){
+    public cliente(int tipoAcceso, String nombre, String idPersona) {
         super(tipoAcceso, nombre, idPersona);
-        this.puntosCliente=puntosCliente;
+        this.puntosCliente = 0; // corregido
     }
 
     public int getPuntosCliente() {
@@ -14,6 +14,4 @@ public class cliente extends persona{
     public void setPuntosCliente(int puntosCliente) {
         this.puntosCliente = puntosCliente;
     }
-    
-
 }

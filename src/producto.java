@@ -1,4 +1,4 @@
-public class Producto{
+class Producto{
     private String idef;
     private String name;
     private double price;
