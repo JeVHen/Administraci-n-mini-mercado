@@ -15,21 +15,27 @@ public class Inventario {
 
     // ALERTA DE BAJAS UNIDADES
     public void alertarBajos() {
-        StringBuilder alertas = new StringBuilder();
-
-        for (Producto p : productos) {
-            if (p.getCantidad() > 0 && p.getCantidad() <= 5) {
-                alertas.append("⚠ Producto con pocas unidades:\n")
-                        .append(p.getName())
-                        .append(" | Unidades: ").append(p.getCantidad())
-                        .append("\n\n");
-            }
-        }
-
-        if (alertas.length() > 0) {
-            JOptionPane.showMessageDialog(null, alertas.toString(), "ALERTA DE INVENTARIO", JOptionPane.WARNING_MESSAGE);
+    String alertas = "";
+    for (Producto p : productos) {
+        int cantidad = p.getCantidad();
+        if (cantidad > 0 && cantidad <= 2) {
+            alertas = alertas +
+                    "Producto con pocas unidades:\n" +
+                    p.getName() +
+                    " | Unidades: " + cantidad +
+                    "\n\n";
         }
     }
+
+    if (!alertas.equals("")) {
+        JOptionPane.showMessageDialog(
+                null,
+                alertas,
+                "ALERTA DE INVENTARIO",
+                JOptionPane.WARNING_MESSAGE
+        );
+    }
+}
 
     // REGISTRAR PRODUCTO (usa constructor con cantidad)
     public void registrarProducto() {
@@ -67,6 +73,8 @@ public class Inventario {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Cantidad inválida.");
             }
+
+        /*Por si acaso, con el try catch tuvimos que pedirle ayuda a un compañero de Programación 1 para impedir que se rompa el código */
         }
 
         productos.add(new Producto(id, nombre, precio, cant));
@@ -81,7 +89,7 @@ public class Inventario {
         return null;
     }
 
-    // REALIZAR VENTA: comprueba unidades y actualiza cantidad; crea Venta y muestra
+    // método para hacer venta. kevin ayudeme con venta y muestra más abajo pls
     public void realizarVenta() {
 
         alertarBajos(); // alerta ANTES de cualquier venta
@@ -137,18 +145,15 @@ for (Producto p : productos) {
             }
         }
 
-        // RESTAR DEL INVENTARIO
+        // quita del inventario las unidades vendidas
         elegido.setCantidad(elegido.getCantidad() - unidadesSolicitadas);
 
-        // CALCULAR TOTAL
         double total = unidadesSolicitadas * elegido.getPrice();
 
-        // CREAR VENTA (precioUnitario, cantidad)
         Venta venta = new Venta(elegido.getPrice(), unidadesSolicitadas);
 
-        // Mostrar info de la venta (usa el método que ya tienes)
         venta.ejecutarVenta(elegido);
 
-        alertarBajos(); // alerta DESPUÉS de vender
+        alertarBajos(); // alerta DESPUÉS de vender para que no confundir
     }
 }

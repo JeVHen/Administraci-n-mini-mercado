@@ -2,10 +2,9 @@ public class Producto {
     private String idef;
     private String name;
     private double price;
-    private int cantidad;           // NUEVO
+    private int cantidad;        
     private boolean disponibilidad;
 
-    // Constructor nuevo (con cantidad)
     public Producto(String idef, String name, double price, int cantidad) {
         this.idef = idef;
         this.name = name;
@@ -14,16 +13,19 @@ public class Producto {
         this.disponibilidad = this.cantidad > 0;
     }
 
-    // Constructor antiguo (por compatibilidad) -> mantiene comportamiento anterior
     public Producto(String idef, String name, double price, boolean disponibilidad) {
-        this.idef = idef;
-        this.name = name;
-        this.price = price;
-        this.disponibilidad = disponibilidad;
-        this.cantidad = disponibilidad ? 1 : 0; // si se usaba disponibilidad, asumimos 1 unidad si true
-    }
+    this.idef = idef;
+    this.name = name;
+    this.price = price;
+    this.disponibilidad = disponibilidad;
 
-    // Getters y setters
+    if (disponibilidad == true) {
+        this.cantidad = 1;
+    } else {
+        this.cantidad = 0;
+    }
+}
+
     public String getIdef() {
         return idef;
     }
@@ -48,7 +50,6 @@ public class Producto {
         this.price = price;
     }
 
-    // Nuevo getter/setter de cantidad
     public int getCantidad() {
         return cantidad;
     }
@@ -63,8 +64,15 @@ public class Producto {
     }
 
     public void setDisponibilidad(boolean disponibilidad) {
-        this.disponibilidad = disponibilidad;
-        if (!disponibilidad) this.cantidad = 0;
-        else if (this.cantidad == 0) this.cantidad = 1; // si lo activan y no hay cantidad, dejamos 1 por compatibilidad
+    this.disponibilidad = disponibilidad;
+
+    if (disponibilidad == false) {
+        this.cantidad = 0;
+    } else {
+        if (this.cantidad == 0) {
+            this.cantidad = 1;
+        }
     }
+}
+
 }

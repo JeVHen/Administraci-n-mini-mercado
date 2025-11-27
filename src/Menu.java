@@ -43,7 +43,6 @@ public class Menu {
 
             boolean asistencia = (asis == JOptionPane.YES_OPTION);
 
-            // tipoaceso = 2 (solo ejmplo)
             Trabajador t = new Trabajador(2, nombre, id, horas, asistencia);
             trabajadores.add(t);
 
@@ -54,9 +53,8 @@ public class Menu {
         }
     }
 
-    // ----------------------------------------------------
-    // MOSTRAR TRABAJADORS
-    // ----------------------------------------------------
+    // MOSTRAR TRABAJADORs
+    
     public static void mostrarTrabajadores() {
         if (trabajadores.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No hay trabajadores registrados.");
