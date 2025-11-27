@@ -10,7 +10,9 @@ public class principal {
         ArrayList<Producto> productos = new ArrayList<>();
         ArrayList<Trabajador> trabajadores = new ArrayList<>();
 
-        // Admin inicial obligatorio
+        Inventario inventario = new Inventario(productos);
+
+        // Admin inicial
         administradores.add(new Administrador(
                 1,
                 "admin",
@@ -19,6 +21,9 @@ public class principal {
         ));
 
         while (true) {
+
+            inventario.alertarBajos(); // alerta en cada ciclo
+
             String opc = JOptionPane.showInputDialog(
                     "===== SISTEMA DE TIENDA =====\n" +
                     "1. Administrador\n" +
@@ -31,10 +36,10 @@ public class principal {
 
             switch (opc) {
                 case "1":
-                    loginAdmin(administradores, clientes, productos, trabajadores);
+                    loginAdmin(administradores, clientes, inventario, trabajadores);
                     break;
                 case "2":
-                    menuTrabajador(clientes, productos);
+                    menuTrabajador(clientes, inventario);
                     break;
                 case "3":
                     System.exit(0);
@@ -45,11 +50,11 @@ public class principal {
         }
     }
 
-    // ============================
+    // ==================================================
     // LOGIN ADMIN
-    // ============================
+    // ==================================================
     public static void loginAdmin(ArrayList<Administrador> admins, ArrayList<cliente> clientes,
-                                  ArrayList<Producto> productos, ArrayList<Trabajador> trabajadores) {
+                                  Inventario inventario, ArrayList<Trabajador> trabajadores) {
 
         String id = JOptionPane.showInputDialog("Digite ID de administrador:");
         if (id == null) return;
@@ -59,20 +64,22 @@ public class principal {
 
         for (Administrador a : admins) {
             if (a.getIdPersona().equals(id) && a.getContraseña().equals(pass)) {
-                menuAdmin(admins, clientes, productos, trabajadores);
+                menuAdmin(admins, clientes, inventario, trabajadores);
                 return;
             }
         }
         JOptionPane.showMessageDialog(null, "Datos incorrectos");
     }
 
-    // ============================
-    // MENU ADMIN COMPLETO
-    // ============================
+    // ==================================================
+    // MENU ADMIN
+    // ==================================================
     public static void menuAdmin(ArrayList<Administrador> admins, ArrayList<cliente> clientes,
-                                 ArrayList<Producto> productos, ArrayList<Trabajador> trabajadores) {
+                                 Inventario inventario, ArrayList<Trabajador> trabajadores) {
 
         while (true) {
+
+            inventario.alertarBajos();
 
             String op = JOptionPane.showInputDialog(
                     "===== ADMINISTRADOR =====\n" +
@@ -88,9 +95,9 @@ public class principal {
 
             switch (op) {
 
-                // -----------------------------------------
+                // =============================
                 // 1. REGISTRAR TRABAJADOR
-                // -----------------------------------------
+                // =============================
                 case "1":
                     String nombT = JOptionPane.showInputDialog("Nombre del trabajador:");
                     if (nombT == null || nombT.trim().isEmpty()) {
@@ -108,10 +115,7 @@ public class principal {
                     boolean validoH = false;
                     while (!validoH) {
                         String h = JOptionPane.showInputDialog("Horas trabajadas:");
-                        if (h == null) {
-                            JOptionPane.showMessageDialog(null, "Registro cancelado.");
-                            return;
-                        }
+                        if (h == null) return;
                         try {
                             horas = Integer.parseInt(h);
                             validoH = true;
@@ -128,103 +132,55 @@ public class principal {
                     JOptionPane.showMessageDialog(null, "Trabajador registrado correctamente.");
                     break;
 
-
-                // -----------------------------------------
+                // =============================
                 // 2. REGISTRAR PRODUCTO
-                // -----------------------------------------
+                // =============================
                 case "2":
-
-                    String idp = JOptionPane.showInputDialog("ID del producto:");
-                    if (idp == null || idp.trim().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "ID inválido.");
-                        break;
-                    }
-
-                    String nombreProd = JOptionPane.showInputDialog("Nombre del producto:");
-                    if (nombreProd == null || nombreProd.trim().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Nombre inválido.");
-                        break;
-                    }
-
-                    double precio = 0;
-                    boolean validoPrecio = false;
-
-                    while (!validoPrecio) {
-                        String inputPrecio = JOptionPane.showInputDialog("Precio del producto:");
-
-                        if (inputPrecio == null) {
-                            JOptionPane.showMessageDialog(null, "Registro cancelado.");
-                            return;
-                        }
-
-                        try {
-                            precio = Double.parseDouble(inputPrecio);
-                            validoPrecio = true;
-                        } catch (NumberFormatException e) {
-                            JOptionPane.showMessageDialog(null, "Precio inválido. Intente otra vez.");
-                        }
-                    }
-
-                    productos.add(new Producto(idp, nombreProd, precio, true));
-                    JOptionPane.showMessageDialog(null, "Producto registrado exitosamente.");
+                    inventario.registrarProducto();
                     break;
 
-
-                // -----------------------------------------
+                // =============================
                 // 3. REGISTRAR ADMINISTRADOR
-                // -----------------------------------------
+                // =============================
                 case "3":
-
                     String nombA = JOptionPane.showInputDialog("Nombre del administrador:");
-                    if (nombA == null || nombA.trim().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Nombre inválido.");
-                        break;
-                    }
+                    if (nombA == null || nombA.trim().isEmpty()) break;
 
                     String idA = JOptionPane.showInputDialog("ID del administrador:");
-                    if (idA == null || idA.trim().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "ID inválido.");
-                        break;
-                    }
+                    if (idA == null || idA.trim().isEmpty()) break;
 
                     String contra = JOptionPane.showInputDialog("Contraseña:");
-                    if (contra == null || contra.trim().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Contraseña inválida.");
-                        break;
-                    }
+                    if (contra == null || contra.trim().isEmpty()) break;
 
                     admins.add(new Administrador(1, nombA, idA, contra));
                     JOptionPane.showMessageDialog(null, "Administrador registrado correctamente.");
                     break;
 
-
-                // -----------------------------------------
+                // =============================
                 // 4. MOSTRAR PRODUCTOS
-                // -----------------------------------------
+                // =============================
                 case "4":
-
-                    if (productos.isEmpty()) {
+                    if (inventario.getProductos().isEmpty()) {
                         JOptionPane.showMessageDialog(null, "No hay productos registrados.");
                         break;
                     }
 
                     StringBuilder listaP = new StringBuilder("PRODUCTOS REGISTRADOS:\n\n");
-                    for (Producto p : productos) {
+                    for (Producto p : inventario.getProductos()) {
                         listaP.append("- ID: ").append(p.getIdef())
                                 .append(" | Nombre: ").append(p.getName())
                                 .append(" | Precio: $").append(p.getPrice())
+                                .append(" | Cantidad: ").append(p.getCantidad())
                                 .append("\n");
                     }
 
                     JOptionPane.showMessageDialog(null, listaP.toString());
                     break;
 
-
-                // -----------------------------------------
+                // =============================
                 // 5. MOSTRAR TRABAJADORES
-                // -----------------------------------------
+                // =============================
                 case "5":
-
                     if (trabajadores.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "No hay trabajadores registrados.");
                         break;
@@ -243,10 +199,6 @@ public class principal {
                     JOptionPane.showMessageDialog(null, listaT.toString());
                     break;
 
-
-                // -----------------------------------------
-                // 6. VOLVER
-                // -----------------------------------------
                 case "6":
                     return;
 
@@ -256,12 +208,14 @@ public class principal {
         }
     }
 
-    // ============================
+    // ==================================================
     // MENU TRABAJADOR
-    // ============================
-    public static void menuTrabajador(ArrayList<cliente> clientes, ArrayList<Producto> productos) {
+    // ==================================================
+    public static void menuTrabajador(ArrayList<cliente> clientes, Inventario inventario) {
 
         while (true) {
+
+            inventario.alertarBajos();
 
             String op = JOptionPane.showInputDialog(
                     "===== TRABAJADOR =====\n" +
@@ -276,83 +230,17 @@ public class principal {
 
                 case "1":
                     String n = JOptionPane.showInputDialog("Nombre cliente:");
-                    if (n == null || n.trim().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Nombre inválido.");
-                        break;
-                    }
+                    if (n == null || n.trim().isEmpty()) break;
 
                     String id = JOptionPane.showInputDialog("ID:");
-                    if (id == null || id.trim().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "ID inválido.");
-                        break;
-                    }
+                    if (id == null || id.trim().isEmpty()) break;
 
                     clientes.add(new cliente(3, n, id));
                     JOptionPane.showMessageDialog(null, "Cliente registrado.");
                     break;
 
                 case "2":
-                    if (productos.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "No hay productos.");
-                        break;
-                    }
-
-                    StringBuilder lista = new StringBuilder("Productos:\n");
-                    for (Producto p : productos)
-                        lista.append(p.getIdef()).append(" - ").append(p.getName()).append("\n");
-
-                    String buscar = JOptionPane.showInputDialog(lista + "\nID del producto:");
-                    if (buscar == null) break;
-
-                    Producto elegido = null;
-                    for (Producto p : productos)
-                        if (p.getIdef().equals(buscar))
-                            elegido = p;
-
-                    if (elegido == null) {
-                        JOptionPane.showMessageDialog(null, "Producto no encontrado");
-                        break;
-                    }
-
-                    int cant = 0;
-                    boolean validoCant = false;
-
-                    while (!validoCant) {
-                        String input = JOptionPane.showInputDialog("Cantidad:");
-                        if (input == null) return;
-
-                        try {
-                            cant = Integer.parseInt(input);
-                            if (cant <= 0) throw new Exception();
-                            validoCant = true;
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, "Cantidad inválida.");
-                        }
-                    }
-
-                    double total = elegido.getPrice() * cant;
-                    JOptionPane.showMessageDialog(null,
-                            "Venta realizada:\n" +
-                                    "Producto: " + elegido.getName() + "\n" +
-                                    "Total: $" + total);
-
-                    // puntos
-                    String idc = JOptionPane.showInputDialog("ID del cliente para puntos:");
-                    if (idc == null) break;
-
-                    cliente c = null;
-                    for (cliente cl : clientes)
-                        if (cl.getIdPersona().equals(idc))
-                            c = cl;
-
-                    if (c != null) {
-                        c.setPuntosCliente(c.getPuntosCliente() + (cant * 10));
-                        JOptionPane.showMessageDialog(null,
-                                "Puntos acumulados: " + c.getPuntosCliente());
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Cliente no encontrado para asignar puntos.");
-                    }
-
+                    inventario.realizarVenta();
                     break;
 
                 case "3":
